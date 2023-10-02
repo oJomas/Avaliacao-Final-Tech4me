@@ -15,7 +15,5 @@ public interface MusicaClient {
 
     @RequestMapping(method = RequestMethod.GET, value = "/musicas/{id}")
     MusicaDTO getServiceById(@PathVariable String id);
-
-    @RequestMapping(method = RequestMethod.PUT, value = "/musicas/{id}")
-    MusicaDTO updateById(@PathVariable String id, @RequestBody Musica musica );
+    
 }
