@@ -1,0 +1,38 @@
+{
+	"folders": [
+		{
+			"name": "discovery-server",
+			"path": "../discovery-server"
+		},
+		{
+			"name": "gateway",
+			"path": "../gateway"
+		},
+		{
+			"name": "musica",
+			"path": "../musica"
+		},
+		{
+			"name": "music-shop",
+			"path": "../music-shop"
+		},
+		{
+			"name": "config-server",
+			"path": "../config-server"
+		}
+	],
+	"settings": {
+		"cSpell.words": [
+			"branco",
+			"classe",
+			"Criando",
+			"Genero",
+			"nulo",
+			"precisa",
+			"retorna",
+			"Validando",
+			"variável",
+			"Verificando"
+		]
+	}
+}
