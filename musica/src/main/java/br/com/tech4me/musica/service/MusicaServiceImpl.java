@@ -20,14 +20,13 @@ public class MusicaServiceImpl implements MusicaService{
     @Autowired
     MusicaRepository repository;
 
-    //Obtendo os dados de todas as músicas!
+    //Método para pegar todas as músicas cadastradas!
     @Override
     public List<MusicaDTO> getAll() {
         return repository.findAll().stream().map(m -> MusicaDTO.from(m)).toList();
     }
 
-
-    //Pegando uma música pelo Id
+    //Método para pegar uma música específica
     @Override
     public Optional<MusicaDTO> getById(String id) {
         //Criando uma variável da classe musica e pegando o id escolhido!
@@ -35,11 +34,10 @@ public class MusicaServiceImpl implements MusicaService{
         var musica = repository.findById(id);
         
         //Verificando se o id está presente nos dados! Caso estiver retorna o método, caso não retorna vázio!
-        return repository.findById(id).isPresent() ? Optional.of(MusicaDTO.from(musica.get())) : Optional.empty();
-        
+        return repository.findById(id).isPresent() ? Optional.of(MusicaDTO.from(musica.get())) : Optional.empty();    
     }
 
-   // @CircuitBreaker(name = "register", fallbackMethod = "fallbackRegister")
+    
     //Método para cadastrar uma música nova
     @Override
     public MusicaDTO register(MusicaDTO musicaDto) {
