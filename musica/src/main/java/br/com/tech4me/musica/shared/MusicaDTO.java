@@ -2,19 +2,18 @@ package br.com.tech4me.musica.shared;
 
 import br.com.tech4me.musica.model.GeneroMusical;
 import br.com.tech4me.musica.model.Musica;
-
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
 
 //O DTO é usado para transferir dados e verificar se esses dados estão corretos com o "Validation"!
 public record MusicaDTO(String id,
 
                         //Validando se não há um campo em branco nos dados ou nulo!
-                        @NotNull(message = "Está com caracteres nulos!")
+                        @NotBlank(message = "Está com caracteres nulos!")
                         String nomeDaMusica,
 
                         //Validando se não há um campo em branco nos dados ou nulo! 
-                        @NotNull(message = "Está com caracteres nulos!")
+                        @NotBlank(message = "Está com caracteres nulos!")
                         String artista, 
 
                         GeneroMusical generoMusical,
