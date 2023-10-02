@@ -37,6 +37,7 @@ public class Servico_ServiceImpl implements Servico_Service{
     @Override
     //Método para verificar pelo Id um serviço específico
     public Optional<ServicoCompletoDTO> getById(String id) {
+        
         //Criando uma variável da classe musica e pegando o id escolhido!
         //var = Verificação automática do tipo do dado, reduzindo o código repetitivo!
         Optional<Servico> servico = repository.findById(id);
@@ -49,7 +50,7 @@ public class Servico_ServiceImpl implements Servico_Service{
     //@CircuitBreaker faz o suporte para tolerar as falhas projetadas nesse caso vai ser no "register"
     @CircuitBreaker(name = "register", fallbackMethod = "fallbackRegister")
     @Override
-    //Método para cadastrar um novo serviço e se conectando com a música
+    //Método para cadastrar um novo serviço 
     public ServicoCompletoDTO register(ServicoDto servicoDto) {
         Servico servico = Servico.fromServicoDto(servicoDto);
         MusicaDTO musicaDto = client.getServiceById(servicoDto.musicaId());
@@ -68,18 +69,18 @@ public class Servico_ServiceImpl implements Servico_Service{
 
         //Verificando se o id existe
         if(servico.isPresent()){
-            //Alterando os dados da música
+            //Alterando os dados do serviço
             Servico servicoAtualizado = Servico.fromServicoCompletoDTO(servicoDto);
             repository.save(servicoAtualizado);
 
-            //retornado a música alterada
+            //retornado um serviço alterada
             return Optional.of(ServicoCompletoDTO.from(servicoAtualizado));
         }
         //Retornando vazio caso não houver o id
         return Optional.empty();
     }
 
-    //Método para deletarum serviço pelo Id
+    //Método para deletar um serviço pelo Id
     @Override
     public void deleteById(String id) {
         repository.deleteById(id);
