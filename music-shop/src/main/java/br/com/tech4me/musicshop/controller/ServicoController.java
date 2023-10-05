@@ -27,17 +27,15 @@ import jakarta.validation.Valid;
 public class ServicoController {
     
     @Autowired
-    Servico_Service servico;
+    private Servico_Service servico;
 
-
-    //Verificando todos os serviços
+    //Verificando todos os serviços!
     @GetMapping
-    public ResponseEntity<List<ServicoCompletoDTO>> getAllService(){
+    public ResponseEntity<List<ServicoDto>> getAllService(){
         return new ResponseEntity<>(servico.getAll(), HttpStatus.OK);
     }
 
-
-    //Verificando pelo Id um serviço específico
+    //Verificando pelo Id, um serviço específico!
     @GetMapping("/{id}")
     public ResponseEntity<ServicoCompletoDTO> getServiceById(@PathVariable String id){
 
@@ -45,15 +43,15 @@ public class ServicoController {
          : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    //Cadastrando um serviço novo
+    //Cadastrando um novo serviço!
     @PostMapping
-    public ResponseEntity<ServicoCompletoDTO> registerService(@Valid @RequestBody ServicoDto servicoDto){
+    public ResponseEntity<ServicoDto> registerService(@Valid @RequestBody ServicoDto servicoDto){
         return new ResponseEntity<>(servico.register(servicoDto), HttpStatus.CREATED);
     }
 
-    //Alterando os dados de serviço já existente pelo Id
+    //Alterando os dados de um serviço já existente
     @PutMapping("/{id}")
-    public ResponseEntity<ServicoCompletoDTO> updateServiceById(@PathVariable String id, @Valid @RequestBody ServicoDto service){
+    public ResponseEntity<ServicoDto> updateServiceById(@PathVariable String id, @Valid @RequestBody ServicoDto service){
 
         //Verificando, se o serviço e o id estão presente. Caso sim vai pode registrar outro serviço, caso não, retorna não encontrado(NOT_FOUND)
         return servico.getById(id).isPresent() ? new ResponseEntity<>(servico.register(service), HttpStatus.OK): 

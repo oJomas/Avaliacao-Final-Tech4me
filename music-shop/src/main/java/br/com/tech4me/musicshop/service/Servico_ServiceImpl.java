@@ -10,7 +10,6 @@ import br.com.tech4me.musicshop.httpClient.MusicaClient;
 import br.com.tech4me.musicshop.model.Musica;
 import br.com.tech4me.musicshop.model.Servico;
 import br.com.tech4me.musicshop.repository.ServicoRepository;
-import br.com.tech4me.musicshop.shared.MusicaDTO;
 import br.com.tech4me.musicshop.shared.ServicoCompletoDTO;
 import br.com.tech4me.musicshop.shared.ServicoDto;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
@@ -19,62 +18,79 @@ import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 public class Servico_ServiceImpl implements Servico_Service{
 
     @Autowired
-    ServicoRepository repository;
+    private ServicoRepository repository;
 
+    //O MusicaClient faz a conexão entre o serviço e a música
     @Autowired
-    MusicaClient client;
+    private MusicaClient client;
 
-    //@CircuitBreaker faz o suporte para tolerar as falhas projetadas
-    @CircuitBreaker(name = "GetAllService", fallbackMethod = "fallbackGetAllSevice")
+    //Método para verificar todos os serviços
     @Override
-    //método para verificar todos os serviços
-    public List<ServicoCompletoDTO> getAll() {
-        return repository.findAll().stream().map(m -> ServicoCompletoDTO.from(m)).toList();
+    public List<ServicoDto> getAll() {
+        return repository.findAll().stream().map(m -> ServicoDto.fromServicoDto(m)).toList();
     }
 
-    //@CircuitBreaker faz o suporte para tolerar as falhas projetadas
-    @CircuitBreaker(name = "GetServiceById", fallbackMethod = "fallbackGetById")
+    
+    //CircuitBreaker Vai monitorar o método getById, Caso falhe vai chamar o método fallbackGetById
+    @CircuitBreaker(name = "getMusicById", fallbackMethod = "fallbackGetById")
+
+    //Método para pegar pelo Id um serviço específico
     @Override
-    //Método para verificar pelo Id um serviço específico
     public Optional<ServicoCompletoDTO> getById(String id) {
-        
-        //Criando uma variável da classe musica e pegando o id escolhido!
-        //var = Verificação automática do tipo do dado, reduzindo o código repetitivo!
         Optional<Servico> servico = repository.findById(id);
         
-        //Verificando se o id está presente nos dados! Caso estiver retorna o método, caso não retorna vázio!
-        return servico.isPresent() ? Optional.of(ServicoCompletoDTO.from(servico.get())) : Optional.empty();
+        //Verificando se o id está presente nos dados! Caso estiver, retorna o método, caso não, retorna vázio!
+        if(servico.isPresent()){
+            Musica musica = client.getMusicById(servico.get().getMusica());
+            return Optional.of(ServicoCompletoDTO.fromServicoCompleto(servico.get(), musica));
+        }
+    
+        return Optional.empty();
+    }
+
+    //Caso a música não estiver cadastrada no service 
+    public Optional<ServicoCompletoDTO> fallbackGetById(String id, Exception e){
+        Optional<Servico> servico = repository.findById(id);
+
+        if(servico.isPresent()){
+            //A música fica nula na hora de chama o método
+            Musica musica = null;
+            return Optional.of(ServicoCompletoDTO.fromServicoCompleto(servico.get(), musica));
+        }
+        return Optional.empty();
     }
 
 
-    //@CircuitBreaker faz o suporte para tolerar as falhas projetadas nesse caso vai ser no "register"
-    @CircuitBreaker(name = "register", fallbackMethod = "fallbackRegister")
-    @Override
+
     //Método para cadastrar um novo serviço 
-    public ServicoCompletoDTO register(ServicoDto servicoDto) {
-        Servico servico = Servico.fromServicoDto(servicoDto);
-        MusicaDTO musicaDto = client.getServiceById(servicoDto.musicaId());
-        servico.setMusica(Musica.fromMusicaDTO(musicaDto));
+    @Override
+    public ServicoDto register(ServicoDto servicoDto) {
+        new Servico();
+        Servico servico = new Servico().fromServicoDto(servicoDto);
+        //Musica musica = client.getMusicById(servicoDto.musicaId());
         repository.save(servico);
-        return ServicoCompletoDTO.from(servico);
+        return ServicoDto.fromServicoDto(servico);
     }
 
-    //@CircuitBreaker faz o suporte para tolerar as falhas projetadas nesse caso vai ser no "updateRegisterById"
-    @CircuitBreaker(name = "updateRegisterById", fallbackMethod = "fallbackUpdateRegisterById")
-    @Override
+
 
     //Método para atualizar os dados de um serviço já existente
-    public Optional<ServicoCompletoDTO> updateById(String id, ServicoCompletoDTO servicoDto) {
+    @Override
+    public Optional<ServicoDto> updateById(String id, ServicoDto servicoDto) {
         Optional<Servico> servico = repository.findById(id);
-
+        
         //Verificando se o id existe
         if(servico.isPresent()){
+            
             //Alterando os dados do serviço
-            Servico servicoAtualizado = Servico.fromServicoCompletoDTO(servicoDto);
+            Servico servicoAtualizado = new Servico().fromServicoDto(servicoDto);
+            //Salvando com o mesmo Id
+            servicoAtualizado.setId(id);
+            //Salvando no repositório
             repository.save(servicoAtualizado);
-
-            //retornado um serviço alterada
-            return Optional.of(ServicoCompletoDTO.from(servicoAtualizado));
+         
+            //retornado um serviço alterado
+            return Optional.of(ServicoDto.fromServicoDto(servicoAtualizado));
         }
         //Retornando vazio caso não houver o id
         return Optional.empty();

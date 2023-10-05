@@ -3,6 +3,7 @@ package br.com.tech4me.musicshop.model;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+
 import br.com.tech4me.musicshop.shared.ServicoCompletoDTO;
 import br.com.tech4me.musicshop.shared.ServicoDto;
 
@@ -12,31 +13,32 @@ public class Servico {
     @Id
     private String id;
     //Definindo o valor de um serviço
+
+    private String contratante;
     private Double valor;
-    //O tempo da assinatura do serviço!
-    private TempoDeAssinatura assinatura;
-    //O método que o cliente vai pagar
     private Pagamento metodoDePagamento; 
+    private FormatoMusical FormatoMusical;
+    private String musica;
 
-    //Conectando com a coluna música
-    private Musica musica;
-
-    public static Servico fromServicoDto(ServicoDto servicoDto){
+    public Servico fromServicoDto(ServicoDto servicoDto){
         Servico servico = new Servico();
         servico.setId(servicoDto.id());
+        servico.setContratante(servicoDto.contratante());
         servico.setValor(servicoDto.valor());
-        servico.setAssinatura(servicoDto.assinatura());
         servico.setMetodoDePagamento(servicoDto.metodoDePagamento());
+        servico.setFormatoMusical(servicoDto.formatoMusical());
+        servico.setMusica(servicoDto.musicaId());
         return servico;
     }
 
-    public static Servico fromServicoCompletoDTO(ServicoCompletoDTO servicoDto){
+    public Servico fromServicoCompletoDTO(ServicoCompletoDTO servicoDto){
         Servico servico = new Servico();
         servico.setId(servicoDto.id());
+        servico.setContratante(servicoDto.contratante());
         servico.setValor(servicoDto.valor());
-        servico.setAssinatura(servicoDto.assinatura());
         servico.setMetodoDePagamento(servicoDto.metodoDePagamento());
-        servico.setMusica(servicoDto.musica()); 
+        servico.setFormatoMusical(servicoDto.formatoMusical());
+        servico.setMusica(servicoDto.musica().getId()); 
         return servico;
     }
 
@@ -54,19 +56,6 @@ public class Servico {
         this.valor = valor;
     }
     
-    public Musica getMusica() {
-        return musica;
-    }
-    public void setMusica(Musica musica) {
-        this.musica = musica;
-    }
-    public TempoDeAssinatura getAssinatura() {
-        return assinatura;
-    }
-    public void setAssinatura(TempoDeAssinatura assinatura) {
-        this.assinatura = assinatura;
-    }
-
     public Pagamento getMetodoDePagamento() {
         return metodoDePagamento;
     }
@@ -75,5 +64,28 @@ public class Servico {
         this.metodoDePagamento = metodoDePagamento;
     }
 
+    public String getMusica() {
+        return musica;
+    }
+
+    public void setMusica(String musica) {
+        this.musica = musica;
+    }
+
+    public FormatoMusical getFormatoMusical() {
+        return FormatoMusical;
+    }
+
+    public void setFormatoMusical(FormatoMusical formatoMusical) {
+        FormatoMusical = formatoMusical;
+    }
+
+    public String getContratante() {
+        return contratante;
+    }
+
+    public void setContratante(String contratante) {
+        this.contratante = contratante;
+    }
 
 }

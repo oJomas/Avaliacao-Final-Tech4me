@@ -18,15 +18,16 @@ public class MusicaServiceImpl implements MusicaService{
     //O Autowired faz a injeção de dependências automáticamente!
     //As dependências são as bibliotecas externas que a aplicação vai utilizar.
     @Autowired
-    MusicaRepository repository;
+    private MusicaRepository repository;
 
-    //Método para pegar todas as músicas cadastradas!
+    //Método para pegar todas as músicas cadastradas
     @Override
     public List<MusicaDTO> getAll() {
         return repository.findAll().stream().map(m -> MusicaDTO.from(m)).toList();
     }
 
-    //Método para pegar uma música específica
+
+    //Método para pegar uma música específica definida pelo Id
     @Override
     public Optional<MusicaDTO> getById(String id) {
         //Criando uma variável da classe musica e pegando o id escolhido!
@@ -34,14 +35,15 @@ public class MusicaServiceImpl implements MusicaService{
         var musica = repository.findById(id);
         
         //Verificando se o id está presente nos dados! Caso estiver retorna o método, caso não retorna vázio!
-        return repository.findById(id).isPresent() ? Optional.of(MusicaDTO.from(musica.get())) : Optional.empty();    
+        return repository.findById(id).isPresent() ? Optional.of(MusicaDTO.from(musica.get())) : Optional.empty();
+        
     }
 
-    
+
     //Método para cadastrar uma música nova
     @Override
     public MusicaDTO register(MusicaDTO musicaDto) {
-        var musica = Musica.fromMusicaDTO(musicaDto);
+        var musica = new Musica().fromMusicaDTO(musicaDto);
         repository.save(musica);
         return MusicaDTO.from(musica);
     }
@@ -55,9 +57,12 @@ public class MusicaServiceImpl implements MusicaService{
         //Verificando se o id existe
         if(musica.isPresent()){
             //Alterando os dados da música
-            Musica musicaAtualizado = Musica.fromMusicaDTO(musicaDto);
+            Musica musicaAtualizado = new Musica().fromMusicaDTO(musicaDto);
+            //Deixando a música com o mesmo Id
+            musicaAtualizado.setId(id);
+            //Salvando no banco de dados
             repository.save(musicaAtualizado);
-
+           
             //retornado a música alterada
             return Optional.of(MusicaDTO.from(musicaAtualizado));
         }

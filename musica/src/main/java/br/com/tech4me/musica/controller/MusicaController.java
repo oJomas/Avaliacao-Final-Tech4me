@@ -21,7 +21,7 @@ import jakarta.validation.Valid;
 
 //O Controller é Respónsável pela comunicação entre a interface do usuário e o servidor.
 
-// O RestController Define que essa aplicação é uma controller, poupando bastante do trabalho manual.
+//O RestController Define que essa aplicação é uma controller, poupando bastante do trabalho manual.
 //O RequestMapping é usado para manipular alterações dinâmicas no URI.
 @RestController
 @RequestMapping("/musicas")

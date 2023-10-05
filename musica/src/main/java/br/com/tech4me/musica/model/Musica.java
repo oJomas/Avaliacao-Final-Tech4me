@@ -6,6 +6,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import br.com.tech4me.musica.shared.MusicaDTO;
 
 //As Classes Model é responsável por armazenar os dados da aplicação!
+//@Document pega o banco de dados no MongoDB
 @Document("musica")
 public class Musica{
 
@@ -26,14 +27,13 @@ public class Musica{
     private Integer anoLancamento;
 
     //Construtor, que armazena os dados da classe "Musica"
-    public static Musica fromMusicaDTO(MusicaDTO musicaDto){
+    public Musica fromMusicaDTO(MusicaDTO musicaDto){
         Musica musica = new Musica();
         musica.setId(musicaDto.id());
         musica.setNomeDaMusica(musicaDto.nomeDaMusica());
         musica.setArtista(musicaDto.artista());
         musica.setGeneroMusical(musicaDto.generoMusical());
         musica.setAnoLancamento(musicaDto.anoLancamento());
-        
         return musica;
     }
 

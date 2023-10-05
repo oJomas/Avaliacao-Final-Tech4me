@@ -1,28 +1,30 @@
 package br.com.tech4me.musicshop.shared;
 
 
+import br.com.tech4me.musicshop.model.FormatoMusical;
 import br.com.tech4me.musicshop.model.Pagamento;
 import br.com.tech4me.musicshop.model.Servico;
-import br.com.tech4me.musicshop.model.TempoDeAssinatura;
-
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
 
 public record ServicoDto(
     String id,
 
+    @NotBlank(message = "Nome do contratante está inválido!")
+    String contratante,
+    
     //O @Positive está verificando se o "valor" está acima de 0
     @Positive(message = "O valor precisa ser positivo")
     Double valor,
 
-    TempoDeAssinatura assinatura,
-
     Pagamento metodoDePagamento,
+
+    FormatoMusical formatoMusical,
 
     String musicaId){
 
-    public static ServicoDto from(Servico servico){
-        return new ServicoDto(servico.getId(),
-        servico.getValor(), servico.getAssinatura(), servico.getMetodoDePagamento(), servico.getMusica().getId());
+    public static ServicoDto fromServicoDto(Servico servico){
+        return new ServicoDto(servico.getId(), servico.getContratante(), servico.getValor(), servico.getMetodoDePagamento(), servico.getFormatoMusical(), servico.getMusica());
     }
     
 }

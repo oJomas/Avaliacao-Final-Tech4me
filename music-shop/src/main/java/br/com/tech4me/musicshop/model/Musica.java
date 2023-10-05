@@ -1,7 +1,5 @@
 package br.com.tech4me.musicshop.model;
 
-import br.com.tech4me.musicshop.shared.MusicaDTO;
-
 //As Classes Model é responsável por armazenar os dados da aplicação!
 public class Musica {
 
@@ -19,17 +17,6 @@ public class Musica {
     //O Ano da música
     private Integer anoLancamento;
    
-    //Construtor, que armazena os dados da classe "Musica"
-    public static Musica fromMusicaDTO(MusicaDTO musicaDto){
-        Musica musica = new Musica();
-        musica.setId(musicaDto.id());
-        musica.setNomeDaMusica(musicaDto.nomeDaMusica());
-        musica.setArtista(musicaDto.artista());
-        musica.setGeneroMusical(musicaDto.generoMusical());
-        musica.setAnoLancamento(musicaDto.anoLancamento()); 
-        return musica;
-    }
-
     //Getters:
     public String getId() {
         return id;

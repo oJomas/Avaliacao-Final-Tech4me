@@ -16,7 +16,7 @@ public interface MusicaService {
     //Método para cadastrar uma música!
     MusicaDTO register(@Valid MusicaDTO musicaDto);
 
-    //Método que atualiza um música cadastrada, caso houver algum erro!
+    //Método que atualiza um música cadastrada!
     Optional<MusicaDTO> updateById(String id, @Valid MusicaDTO musicaDto);
     
     //Método para excluir uma música da lista

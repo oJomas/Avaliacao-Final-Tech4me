@@ -2,6 +2,7 @@ package br.com.tech4me.musica.shared;
 
 import br.com.tech4me.musica.model.GeneroMusical;
 import br.com.tech4me.musica.model.Musica;
+
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
 
@@ -9,17 +10,17 @@ import jakarta.validation.constraints.Positive;
 public record MusicaDTO(String id,
 
                         //Validando se não há um campo em branco nos dados ou nulo!
-                        @NotBlank(message = "Está com caracteres nulos!")
+                        @NotBlank(message = "O nomeDaMusica está com caracteres em brancos e nulo!")
                         String nomeDaMusica,
 
                         //Validando se não há um campo em branco nos dados ou nulo! 
-                        @NotBlank(message = "Está com caracteres nulos!")
+                        @NotBlank(message = "O artista está com caracteres em branco e nulo!")
                         String artista, 
 
                         GeneroMusical generoMusical,
 
                         //O @Positive está verificando se o "anolacamento" está acima de 0
-                        @Positive
+                        @Positive(message = "O ano de lançamento precisa ser positivo") 
                         Integer anoLancamento){
     
     public static MusicaDTO from(Musica music){
